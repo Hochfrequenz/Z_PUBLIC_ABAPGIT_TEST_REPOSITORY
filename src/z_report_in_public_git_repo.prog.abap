@@ -4,4 +4,4 @@
 *&
 *&---------------------------------------------------------------------*
 REPORT Z_REPORT_IN_PUBLIC_GIT_REPO.
-WRITE 'HELLO PUBLIC REPO - TEST-20260123-163600-6c2de1a9'.
+WRITE 'HELLO PUBLIC REPO'.
