@@ -1,6 +1,30 @@
 *&---------------------------------------------------------------------*
 *& Report Z_ABAPGIT_PULL
 *&---------------------------------------------------------------------*
+*& PURPOSE:
+*&   Pull changes from an abapGit repository using the abapGit ABAP API.
+*&   Designed to be called via transaction Z_ABAPGIT_PULL for automation
+*&   by MCP tools (Model Context Protocol).
+*&
+*& WHY THIS APPROACH:
+*&   The abapGit web UI is fragile for automation (complex dialogs,
+*&   custom elements, timing issues). Using the ABAP API directly is
+*&   more reliable, faster, and stable across abapGit versions.
+*&
+*& PARAMETERS:
+*&   P_REPO   - Repository name pattern (matched against registered repos)
+*&   P_USER   - GitHub username (optional for public repos)
+*&   P_TOKEN  - GitHub PAT token (optional for public repos)
+*&   P_TRKORR - Transport request (optional, error if required but missing)
+*&
+*& STATUS BAR MESSAGES (read by MCP tool via sap_read_status_bar):
+*&   Success: "Pull successful: <repo_name>"
+*&   Error:   "Repository not found: <pattern>"
+*&   Error:   "Transport required. Provide P_TRKORR=<type>"
+*&   Error:   "<exception message>"
+*&
+*& API REFERENCE: https://docs.abapgit.org/development-guide/api/api.html
+*&---------------------------------------------------------------------*
   REPORT z_abapgit_pull.
 
   PARAMETERS:
