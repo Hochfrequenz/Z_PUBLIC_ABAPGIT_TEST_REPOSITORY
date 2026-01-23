@@ -7,7 +7,7 @@
     p_repo   TYPE string LOWER CASE OBLIGATORY,
     p_user   TYPE string LOWER CASE,
     p_token  TYPE string LOWER CASE,
-    p_trkorr TYPE trkorr OBLIGATORY.
+    p_trkorr TYPE trkorr.
 
   START-OF-SELECTION.
     TRY.
@@ -33,6 +33,11 @@
         ENDIF.
 
         DATA(ls_checks) = lo_repo->deserialize_checks( ).
+
+        IF ls_checks-transport-required = abap_true AND p_trkorr IS INITIAL.
+          MESSAGE e398(00) WITH 'Transport required. Provide P_TRKORR=' ls_checks-transport-type '' ''.
+          RETURN.
+        ENDIF.
         ls_checks-transport-transport = p_trkorr.
 
         lo_repo->deserialize(
