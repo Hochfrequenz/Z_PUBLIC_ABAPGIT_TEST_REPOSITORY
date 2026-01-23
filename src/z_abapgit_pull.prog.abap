@@ -47,6 +47,11 @@
         ENDIF.
         ls_checks-transport-transport = p_trkorr.
 
+        " Auto-confirm all overwrite decisions (MCP automation requires non-interactive mode)
+        LOOP AT ls_checks-overwrite ASSIGNING FIELD-SYMBOL(<ls_overwrite>).
+          <ls_overwrite>-decision = zif_abapgit_definitions=>c_decision-overwrite.
+        ENDLOOP.
+
         lo_repo->deserialize(
           is_checks = ls_checks
           ii_log    = NEW zcl_abapgit_log( ) ).
