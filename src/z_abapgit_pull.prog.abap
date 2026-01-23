@@ -3,11 +3,18 @@
 *&---------------------------------------------------------------------*
   REPORT z_abapgit_pull.
 
-  PARAMETERS:
-    p_repo   TYPE string LOWER CASE OBLIGATORY,
-    p_user   TYPE string LOWER CASE,
-    p_token  TYPE string LOWER CASE,
-    p_trkorr TYPE trkorr.
+* Selection screen with readable labels and F4 help
+  SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-001.
+    PARAMETERS:
+      p_repo   TYPE string LOWER CASE OBLIGATORY,  " Repository name
+      p_trkorr TYPE trkorr.                         " Transport request (F4 available)
+  SELECTION-SCREEN END OF BLOCK b1.
+
+  SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE TEXT-002.
+    PARAMETERS:
+      p_user   TYPE string LOWER CASE,             " GitHub username
+      p_token  TYPE string LOWER CASE.             " GitHub PAT (Personal Access Token)
+  SELECTION-SCREEN END OF BLOCK b2.
 
   START-OF-SELECTION.
     TRY.

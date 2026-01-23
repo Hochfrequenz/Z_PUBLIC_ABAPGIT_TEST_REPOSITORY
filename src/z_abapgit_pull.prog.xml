@@ -12,8 +12,44 @@
    <TPOOL>
     <item>
      <ID>R</ID>
-     <ENTRY>programatically callsthe abapgit api for straightforward pull</ENTRY>
-     <LENGTH>61</LENGTH>
+     <ENTRY>abapGit Pull via API - for MCP automation</ENTRY>
+     <LENGTH>42</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>001</KEY>
+     <ENTRY>Repository Settings</ENTRY>
+     <LENGTH>19</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>002</KEY>
+     <ENTRY>GitHub Credentials (optional for public repos)</ENTRY>
+     <LENGTH>46</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_REPO</KEY>
+     <ENTRY>Repository Name</ENTRY>
+     <LENGTH>15</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_TRKORR</KEY>
+     <ENTRY>Transport Request</ENTRY>
+     <LENGTH>17</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_USER</KEY>
+     <ENTRY>GitHub Username</ENTRY>
+     <LENGTH>15</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_TOKEN</KEY>
+     <ENTRY>GitHub PAT Token</ENTRY>
+     <LENGTH>16</LENGTH>
     </item>
    </TPOOL>
   </asx:values>
