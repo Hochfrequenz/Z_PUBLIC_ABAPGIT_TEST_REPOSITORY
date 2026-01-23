@@ -48,8 +48,9 @@
         ls_checks-transport-transport = p_trkorr.
 
         " Auto-confirm all overwrite decisions (MCP automation requires non-interactive mode)
+        " Decision values: ' ' = undecided, 'Y' = overwrite, 'N' = skip
         LOOP AT ls_checks-overwrite ASSIGNING FIELD-SYMBOL(<ls_overwrite>).
-          <ls_overwrite>-decision = zif_abapgit_definitions=>c_decision-overwrite.
+          <ls_overwrite>-decision = 'Y'.
         ENDLOOP.
 
         lo_repo->deserialize(
