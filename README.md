@@ -1,2 +1,5 @@
 # Z_PUBLIC_ABAPGIT_TEST_REPOSITORY
-a PUBLIC test repository to test the mcp-tool `abap_git_pull` (w/o PAT). doesn't contain meaningful data
+A PUBLIC test repository to test the mcp-tool `abap_git_pull` (w/o PAT) (see [sapwebgui.mcp](https://github.com/Hochfrequenz/sapwebgui.mcp)). 
+It doesn't contain meaningful data.
+It just contains an empty package `Z_PUBLIC_ABAPGIT_TEST_PACKAGE`.
+It's just to test the `git pull` WITHOUT providing a github username or PAT.
