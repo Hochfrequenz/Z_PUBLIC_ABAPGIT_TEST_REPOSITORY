@@ -29,6 +29,12 @@
     </item>
     <item>
      <ID>S</ID>
+     <KEY>P_ACTION</KEY>
+     <ENTRY>Action (PULL or LIST)</ENTRY>
+     <LENGTH>28</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
      <KEY>P_REPO</KEY>
      <ENTRY>Repository Name</ENTRY>
      <LENGTH>23</LENGTH>

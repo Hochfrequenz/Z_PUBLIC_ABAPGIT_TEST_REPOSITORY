@@ -6,8 +6,10 @@
 * Selection screen with readable labels and F4 help
   SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-001.
     PARAMETERS:
-      p_action TYPE c LENGTH 4 DEFAULT 'PULL',  " Action: PULL or LIST
-      p_repo   TYPE string LOWER CASE,           " Repository name
+      p_action TYPE c LENGTH 4 DEFAULT 'PULL'.  " Action: PULL = pull repo, LIST = list all repos
+    SELECTION-SCREEN COMMENT /1(60) gc_hint.     " Shows valid P_ACTION values
+    PARAMETERS:
+      p_repo   TYPE string LOWER CASE,           " Repository name (required for PULL)
       p_trkorr TYPE trkorr.                       " Transport request (F4 available)
   SELECTION-SCREEN END OF BLOCK b1.
 
@@ -17,9 +19,17 @@
       p_token  TYPE string LOWER CASE.              " GitHub PAT (Personal Access Token)
   SELECTION-SCREEN END OF BLOCK b2.
 
+  INITIALIZATION.
+    gc_hint = 'Valid actions: PULL (pull repo) | LIST (list all repos)'.
+
+  AT SELECTION-SCREEN.
+    IF p_action <> 'PULL' AND p_action <> 'LIST'.
+      MESSAGE e398(00) WITH 'Invalid P_ACTION:' p_action '. Use PULL or LIST.' ''.
+    ENDIF.
+
   START-OF-SELECTION.
 
-* --- LIST mode: output all registered repos as pipe-delimited lines ---
+* --- LIST mode: output all registered repos as tilde-delimited lines ---
     IF p_action = 'LIST'.
       TRY.
           LOOP AT zcl_abapgit_repo_srv=>get_instance( )->list( ) INTO DATA(li_repo_list).
