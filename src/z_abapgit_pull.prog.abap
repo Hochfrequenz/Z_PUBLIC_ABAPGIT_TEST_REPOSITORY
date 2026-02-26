@@ -6,17 +6,48 @@
 * Selection screen with readable labels and F4 help
   SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-001.
     PARAMETERS:
-      p_repo   TYPE string LOWER CASE OBLIGATORY,  " Repository name
-      p_trkorr TYPE trkorr.                         " Transport request (F4 available)
+      p_action TYPE c LENGTH 4 DEFAULT 'PULL',  " Action: PULL or LIST
+      p_repo   TYPE string LOWER CASE,           " Repository name
+      p_trkorr TYPE trkorr.                       " Transport request (F4 available)
   SELECTION-SCREEN END OF BLOCK b1.
 
   SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE TEXT-002.
     PARAMETERS:
       p_user   TYPE string LOWER CASE,             " GitHub username
-      p_token  TYPE string LOWER CASE.             " GitHub PAT (Personal Access Token)
+      p_token  TYPE string LOWER CASE.              " GitHub PAT (Personal Access Token)
   SELECTION-SCREEN END OF BLOCK b2.
 
   START-OF-SELECTION.
+
+* --- LIST mode: output all registered repos as pipe-delimited lines ---
+    IF p_action = 'LIST'.
+      TRY.
+          LOOP AT zcl_abapgit_repo_srv=>get_instance( )->list( ) INTO DATA(li_repo_list).
+            DATA(lv_offline) = li_repo_list->is_offline( ).
+            DATA(lv_offline_flag) = COND string( WHEN lv_offline = abap_true THEN 'X' ELSE '' ).
+            DATA(lv_url) = COND string( WHEN lv_offline = abap_false
+                                        THEN CAST zcl_abapgit_repo_online( li_repo_list )->get_url( )
+                                        ELSE '' ).
+            WRITE: / li_repo_list->get_name( ) NO-GAP,
+                     '|' NO-GAP, lv_url NO-GAP,
+                     '|' NO-GAP, li_repo_list->get_package( ) NO-GAP,
+                     '|' NO-GAP, li_repo_list->ms_data-branch_name NO-GAP,
+                     '|' NO-GAP, li_repo_list->ms_data-deserialized_at NO-GAP,
+                     '|' NO-GAP, li_repo_list->ms_data-deserialized_by NO-GAP,
+                     '|' NO-GAP, lv_offline_flag NO-GAP.
+          ENDLOOP.
+        CATCH cx_root INTO DATA(lx_list_error).
+          MESSAGE e398(00) WITH lx_list_error->get_text( ) '' '' ''.
+      ENDTRY.
+      RETURN.
+    ENDIF.
+
+* --- PULL mode (existing logic, unchanged) ---
+    IF p_repo IS INITIAL.
+      MESSAGE e398(00) WITH 'P_REPO is required for PULL action' '' '' ''.
+      RETURN.
+    ENDIF.
+
     TRY.
         DATA lo_repo TYPE REF TO zcl_abapgit_repo_online.
 
