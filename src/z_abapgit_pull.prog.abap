@@ -1,7 +1,7 @@
 *&---------------------------------------------------------------------*
 *& Report Z_ABAPGIT_PULL
 *&---------------------------------------------------------------------*
-  REPORT z_abapgit_pull.
+  REPORT z_abapgit_pull LINE-SIZE 1023.
 
 * Selection screen with readable labels and F4 help
   SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-001.
