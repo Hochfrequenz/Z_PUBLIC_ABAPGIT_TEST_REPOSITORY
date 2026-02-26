@@ -31,12 +31,12 @@
             DATA(lv_ts) = COND string( WHEN li_repo_list->ms_data-deserialized_at IS NOT INITIAL
                                        THEN |{ li_repo_list->ms_data-deserialized_at }|
                                        ELSE '' ).
-            DATA(lv_line) = li_repo_list->get_name( ) && '|' &&
-                            lv_url && '|' &&
-                            li_repo_list->get_package( ) && '|' &&
-                            li_repo_list->ms_data-branch_name && '|' &&
-                            lv_ts && '|' &&
-                            li_repo_list->ms_data-deserialized_by && '|' &&
+            DATA(lv_line) = li_repo_list->get_name( ) && '~' &&
+                            lv_url && '~' &&
+                            li_repo_list->get_package( ) && '~' &&
+                            li_repo_list->ms_data-branch_name && '~' &&
+                            lv_ts && '~' &&
+                            li_repo_list->ms_data-deserialized_by && '~' &&
                             lv_offline_flag.
             WRITE: / lv_line.
           ENDLOOP.
