@@ -110,8 +110,14 @@
         " has no task (Aufgabe) in the transport — nothing gets written.
         " See: https://github.com/abapGit/abapGit/issues/2495
         "      https://github.com/abapGit/abapGit/issues/2821
-        IF lo_log->count( ) > 0.
-          MESSAGE e398(00) WITH 'Pull failed: deserialization log has' lo_log->count( ) 'entries. Check SE09/SM21.' ''.
+        DATA(lv_log_status) = lo_log->get_status( ).
+        IF lv_log_status = zif_abapgit_log=>c_status-error.
+          DATA(lt_msgs) = lo_log->get_messages( ).
+          IF lines( lt_msgs ) > 0.
+            MESSAGE e398(00) WITH 'Pull error:' lt_msgs[ 1 ]-text '' ''.
+          ELSE.
+            MESSAGE e398(00) WITH 'Pull failed: deserialization log contains errors' '' '' ''.
+          ENDIF.
           RETURN.
         ENDIF.
 
