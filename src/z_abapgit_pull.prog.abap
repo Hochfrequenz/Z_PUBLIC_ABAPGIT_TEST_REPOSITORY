@@ -98,7 +98,8 @@
           <ls_overwrite>-decision = 'Y'.
         ENDLOOP.
 
-        DATA(lo_log) = NEW zcl_abapgit_log( ).
+        DATA lo_log TYPE REF TO zif_abapgit_log.
+        lo_log = NEW zcl_abapgit_log( ).
 
         lo_repo->deserialize(
           is_checks = ls_checks
@@ -107,13 +108,10 @@
         " Check the deserialization log for errors before reporting success.
         " Without this check, pulls silently 'succeed' when e.g. the user
         " has no task (Aufgabe) in the transport — nothing gets written.
-        IF lo_log->get_status( ) = 'E'.
-          DATA(lt_msgs) = lo_log->get_messages( ).
-          IF lines( lt_msgs ) > 0.
-            MESSAGE e398(00) WITH 'Pull failed:' lt_msgs[ 1 ]-text '' ''.
-          ELSE.
-            MESSAGE e398(00) WITH 'Pull failed: deserialization log contains errors' '' '' ''.
-          ENDIF.
+        " See: https://github.com/abapGit/abapGit/issues/2495
+        "      https://github.com/abapGit/abapGit/issues/2821
+        IF lo_log->count( ) > 0.
+          MESSAGE e398(00) WITH 'Pull failed: deserialization log has' lo_log->count( ) 'entries. Check SE09/SM21.' ''.
           RETURN.
         ENDIF.
 
