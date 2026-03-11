@@ -91,15 +91,16 @@
           RETURN.
         ENDIF.
 
-        " Verify user has a task (Aufgabe) in the transport before deserialize.
+        " Verify user has a modifiable task in the transport before deserialize.
         " Without this, deserialize silently succeeds but writes nothing.
         IF p_trkorr IS NOT INITIAL.
-          SELECT COUNT(*) FROM e070
-            WHERE strkorr = @p_trkorr
-              AND as4user = @sy-uname
-              AND trfunction = 'S'.             " S = task (Aufgabe)
-          IF sy-subrc <> 0 OR sy-dbcnt = 0.
-            MESSAGE e398(00) WITH 'User' sy-uname 'has no task in transport' p_trkorr.
+          SELECT SINGLE @abap_true FROM e070
+            INTO @DATA(lv_task_exists)
+            WHERE strkorr  = @p_trkorr
+              AND as4user  = @sy-uname
+              AND trstatus = 'D'.               " D = modifiable
+          IF sy-subrc <> 0.
+            MESSAGE e398(00) WITH 'User' sy-uname 'has no modifiable task in' p_trkorr.
             RETURN.
           ENDIF.
         ENDIF.
@@ -119,18 +120,18 @@
           is_checks = ls_checks
           ii_log    = lo_log ).
 
-        " Check the deserialization log for errors before reporting success.
-        " Without this check, pulls silently 'succeed' when e.g. the user
-        " has no task (Aufgabe) in the transport — nothing gets written.
+        " Check the deserialization log for errors/warnings.
         " See: https://github.com/abapGit/abapGit/issues/2495
         "      https://github.com/abapGit/abapGit/issues/2821
         DATA(lv_log_status) = lo_log->get_status( ).
-        IF lv_log_status = zif_abapgit_log=>c_status-error.
+        IF lv_log_status = zif_abapgit_log=>c_status-error
+           OR lv_log_status = zif_abapgit_log=>c_status-warning.
           DATA(lt_msgs) = lo_log->get_messages( ).
           IF lines( lt_msgs ) > 0.
-            MESSAGE e398(00) WITH 'Pull error:' lt_msgs[ 1 ]-text '' ''.
+            DATA(lv_msg) = lt_msgs[ 1 ]-text.
+            MESSAGE e398(00) WITH 'Pull log:' lv_msg(50) lv_msg+50(50) ''.
           ELSE.
-            MESSAGE e398(00) WITH 'Pull failed: deserialization log contains errors' '' '' ''.
+            MESSAGE e398(00) WITH 'Pull failed: deserialization log has issues' '' '' ''.
           ENDIF.
           RETURN.
         ENDIF.
