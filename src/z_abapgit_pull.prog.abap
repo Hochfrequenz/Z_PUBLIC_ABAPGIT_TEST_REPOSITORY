@@ -90,6 +90,20 @@
           MESSAGE e398(00) WITH 'Transport required. Provide P_TRKORR=' ls_checks-transport-type '' ''.
           RETURN.
         ENDIF.
+
+        " Verify user has a task (Aufgabe) in the transport before deserialize.
+        " Without this, deserialize silently succeeds but writes nothing.
+        IF p_trkorr IS NOT INITIAL.
+          SELECT COUNT(*) FROM e070
+            WHERE strkorr = @p_trkorr
+              AND as4user = @sy-uname
+              AND trfunction = 'S'.             " S = task (Aufgabe)
+          IF sy-subrc <> 0 OR sy-dbcnt = 0.
+            MESSAGE e398(00) WITH 'User' sy-uname 'has no task in transport' p_trkorr.
+            RETURN.
+          ENDIF.
+        ENDIF.
+
         ls_checks-transport-transport = p_trkorr.
 
         " Auto-confirm all overwrite decisions (MCP automation requires non-interactive mode)
