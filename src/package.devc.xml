@@ -4,6 +4,8 @@
   <asx:values>
    <DEVC>
     <CTEXT>a package associated with Z_PUBLIC_ABABGIT_TEST_REPOSITORY</CTEXT>
+    <LANGUAGE>D</LANGUAGE>
+    <MASTERLANG>D</MASTERLANG>
    </DEVC>
   </asx:values>
  </asx:abap>
